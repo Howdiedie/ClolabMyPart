@@ -1,0 +1,37 @@
+body{
+    background-color: aqua;
+}
+
+.fc-toolbar-title{ /*從網頁對標題案檢查 得知內建標題的選擇器為fc-toolbar-title*/
+    color: blue;
+}
+
+.container{
+    background-color: white;
+    /* 調整區塊長寬 */
+    width: 800px;
+    height: 700px;
+    /* 調整位置到置中 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    /* 增加邊框樣式 */
+    border: 1px white;
+    box-shadow: 5px 10px 7px gray;
+    top: 400px;
+    padding: 20px;
+}
+
+/* 下方手刻響應式網頁 */
+@media(max-width:600px){ /*當網頁寬度小於600時做{}內部的css*/
+    .container{ /*透過class選擇container類別將區塊寬度改為400*/
+        width: 400px;
+    }
+    .fc th{
+        font-size: 18px;
+    }
+    .fc-toolbar-title{
+        color: brown;
+    }
+}

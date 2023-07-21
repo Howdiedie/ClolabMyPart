@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<TestBananaContext>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<br />
+
+<div>
+    @foreach(var i in Model)
+    {
+        <h1 style="color:blue">@i.NBT</h1>
+        <h1 style="color:aqua">@i.NBCT</h1>
+    }
+</div>

@@ -1,0 +1,106 @@
+﻿@model List<TestBananaContext>
+
+<div class="container">
+    <div class="mb-4">
+        <div class="row mx-2">
+            <!-- <div class="col-sm-5 mt-5">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="搜尋標題"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div> -->
+
+            @*搜尋框框*@
+            <div class="col-sm-5 mt-5">
+
+                <form id="searchForm" asp-action="NBPage" method="post">
+                    <input class="searchInput" type="text" placeholder="搜尋標題" name="SerchWd" value=@ViewBag.SrWd onfocus="this.placeholder = ''" onblur="this.placeholder = '搜尋標題'">
+                    <a class="icon-search" onclick="submitForm()"><i class="fa-solid fa-magnifying-glass fa-2xl"></i></a>
+                </form>
+
+                <script>
+                    function submitForm() {
+                        document.getElementById("searchForm").submit();
+                    }
+                </script>
+            </div>
+            @*搜尋框框*@
+
+            <div class="col-sm-7 mt-5">
+            </div>
+            <div class="col-sm-9 mt-5">
+                <a href="@Url.Action("NoteBookAdd")" class="addNote">
+                    <i class="fa-regular fa-square-plus fa-2xl" style="font-size: 40px;"></i>
+                    <span>新增記事本</span>
+                </a>
+            </div>
+
+            <div class="col-sm-3 mt-5">
+                <div class="sort">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        排序方式
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="@Url.Action("NBPage",new {SortNum = 1})">日期由近到遠</a></li>
+                        <li><a class="dropdown-item" href="@Url.Action("NBPage",new {SortNum = 2})">日期由遠到近</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <!-- 以下區塊為記事本條列 -->
+
+            <div class="col-sm-12 mt-4 custom-div">
+                
+                @foreach(var i in Model){
+                    <div class="row justify-content-center">
+                        @*記得href後面的href要用雙引號包好==*@
+                        @*<a href="@Url.Action("NoteBookEdit", new { NBTitle = i.NBT }) class="col-md-12 mt-3">*@
+                        <a href="@Url.Action("NoteBookEdit", new { NBTitle = i.NBT })" class="col-md-12 mt-3">
+                            <div class="NbListInside  p-4 my-1">
+                                <div class="d-flex align-items-center" style="height: 100%;">
+                                    <!-- 區塊的內容 -->
+                                    <div class="col-sm-5">
+                                        <p class="CtrNbIfo">@i.NBT</p>
+                                    </div>
+                                    <div class="col-3"></div>
+                                    <div class="col-sm-2">
+                                        <p class="CtrTimeBox">@i.NBCT</p>
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="col-sm-1">
+                                        <div class="NbListCtr">
+                                            <img src="./成員大頭照/0733ba760b29378474dea0fdbcb97107.jpg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // // 获取当前日期
+        // var today = new Date();
+
+        // // 将日期格式化为字符串
+        // var dateString = today.toLocaleDateString();
+
+        // // 将日期字符串显示在指定的区块内
+        // document.getElementById("dateBlock").textContent = dateString;
+
+        document.getElementById('AddNotebook').addEventListener('click', function () {
+            window.open('./LayoutTestEdit.html', '_blank');
+        });
+
+    </script>
+
+    <!--------功能內頁END------>
+</div>

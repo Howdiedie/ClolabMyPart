@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <link rel="stylesheet" href="MyStyle.css">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+
+        
+
+        
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+
+
+          eventClick: function(info) {
+            alert('test');
+          },
+   
+
+
+
+          initialView: 'dayGridMonth',
+          locale:'zh-tw',//這行是自己加的，更改語言為繁中 使用版本6.1.8有些按鈕翻譯不全
+          navLink:true, //增加導覽列進入月曆，自己出現並不會更改樣式 要配合下面headerToolbar
+
+          headerToolbar:{//headToolbar可以根據自己需求 增加行事曆的功能於上方導覽列
+            left: 'prev,next,today',//left:為在左方增加元件 冒號右邊給予 '關鍵字' 增加元件 注意使用關鍵字時不要亂加空格會顯示在前端按鈕上很醜!~~
+            //prev為 新增上一頁按鈕 || next為 新增下一頁按鈕 || today為 新增回到看得到今天頁面的按鈕
+            center: 'title', //中心的地方 放入月份(title)
+            right:'dayGridMonth,timeGridWeek,timeGridDay' //月曆右側 加入月(dayGrinMouth)
+                                                           //周(timeGridWeek),日(timerGridDay)
+          },
+
+          //下方用events來在行事曆格子中新增 '活動'
+          //屆時加入後端資料庫來新增活動 此處先自行輸入熟悉events用法
+          //格式為 events:[{},{},{}...以此類推] 字要打對= = 是Ｅ　Ｖ　Ｅ　Ｎ　Ｔ　Ｓ
+          events:[
+            { //框框內部設定每個活動的細項
+              title:'練習某某某',   //設定活動標題　格式 title:'活動標題字串'
+              start:'2023-06-14',  //設定此項活動開始時間 格式 start:'西元年-月-日'
+              end:'2023-06-19' ,    //設定此項活動結束時間 格式 end:'西元年-月-日'
+              // url:'https://www.youtube.com/watch?v=NcDX7XIQ40c&t=341s'
+            },
+            { 
+              title:'介紹Calender',   //設定活動標題　title:活動標題字串'
+              start:'2023-06-19T16:30:00',  //精確設定開始時間 格式 start:'西元年-月-日T幾點:幾分:幾秒'
+              end:'2023-06-19T17:00:00'  ,   //精確設定結束時間 格式 start:'西元年-月-日T幾點:幾分:幾秒'
+              // url:'https://www.youtube.com/watch?v=NcDX7XIQ40c&t=341s'
+            },
+            {
+              title:'介紹整日活動',
+              start:'2023-06-20',
+              allDay:false //此活動顯示整日 格式allDay:布林值
+            }
+          ],
+          eventClick: function(info) {
+          info.jsEvent.preventDefault(); // don't let the browser navigate
+          if (info.event.url) {
+          window.open(info.event.url);
+          }
+           }
+        });
+        calendar.render();
+      });
+
+    </script>
+  </head>
+  <body>
+    <div class= "container"> <!-- 此處新增區塊並加入類別選擇器來方便使用自創的css檔案(MyStyle.css操控月曆的大小) -->
+      <div id='calendar'></div>
+    </div>
+  </body>
+</html>
