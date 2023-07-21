@@ -1,0 +1,20 @@
+CREATE TRIGGER UpdateMissionCountTotal
+ON Mission
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    UPDATE Intent
+    SET MissionCountTotal = (
+        SELECT COUNT(*)
+        FROM Mission
+        WHERE Mission.IntentID = Intent.IntentID
+        AND Mission.MisState IN ('進行中', '已完成', '新任務')
+    )
+	UPDATE Intent
+	SET MissionCountFinish = (
+		SELECT COUNT(*)
+		FROM Mission
+		WHERE Mission.IntentID = Intent.IntentID
+		AND Mission.MisState = '已完成'
+	)
+END

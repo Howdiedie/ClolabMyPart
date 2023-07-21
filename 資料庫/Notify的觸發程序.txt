@@ -1,0 +1,133 @@
+1.在ProgramMember下的trigger
+
+新增計畫人員時
+CREATE TRIGGER TR_ProgramMember_Insert
+ON ProgramMember
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '加入', '計畫', p.ProgramName, i.ProgramID, i.MemberID,q.MemberName
+    FROM inserted i
+    INNER JOIN Program p ON p.ProgramID = i.ProgramID
+	INNER JOIN Member q ON q.MemberID = i.MemberID;
+END
+
+有人離開計畫時的觸發程序(更改MemberState的狀態名稱)
+CREATE TRIGGER TR_ProgramMember_Delete 
+--ON ProgramMember
+--AFTER UPDATE
+--AS
+--BEGIN
+--    INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+--    SELECT GETDATE(), '離開', '計畫', p.ProgramName, i.ProgramID, i.MemberID,q.MemberName
+--    FROM deleted i
+--    INNER JOIN Program p ON p.ProgramID = i.ProgramID
+--	INNER JOIN Member q ON q.MemberID = i.MemberID;
+--END
+
+2.在Intent下的TRIGGER
+
+新增目標時的觸發程序
+CREATE TRIGGER TR_Intent_Insret
+ON Intent
+AFTER Insert
+AS
+BEGIN
+    INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '新增', '目標', i.IntentName,i.ProgramID,3,q.MemberName
+	FROM inserted i
+	INNER JOIN Program p ON p.ProgramID = i.ProgramID
+	INNER JOIN Member q ON q.MemberID = 3;
+END
+
+更新修改目標時的觸發程序
+CREATE TRIGGER TR_Intent_Update
+ON Intent
+AFTER Update
+AS
+BEGIN
+    INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '修改', '目標', i.IntentName,i.ProgramID,2,q.MemberName
+	FROM inserted i
+	INNER JOIN Program p ON p.ProgramID = i.ProgramID
+	INNER JOIN Member q ON q.MemberID = 2;
+END
+
+3.計畫資料表的TRIGGER
+
+新增計畫資料表的觸發程序
+CREATE TRIGGER TR_Program_Insert
+ON Program
+AFTER INSERT
+AS 
+BEGIN
+INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '新增', '計畫',i.ProgramName,i.ProgramID,3,p.MemberName
+	FROM inserted i
+	INNER JOIN Member p ON p.MemberID = 3;
+END
+
+修改計畫資料表(前端只能修改計畫概述)時的觸發程序
+CREATE TRIGGER TR_Program_Update
+ON Program
+AFTER UPDATE
+AS 
+BEGIN
+INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '修改', '計畫',i.ProgramName,I.ProgramID,2,p.MemberName
+	FROM inserted i
+	INNER JOIN Member p ON p.MemberID = 2;
+END
+
+4.任務資料表的TRIGGER
+
+新增資料表的觸發程序
+CREATE TRIGGER TR_Mission_Insert
+ON Mission
+AFTER INSERT
+AS 
+BEGIN
+INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '新增', '任務',i.MissionName,1,i.MemberID,p.MemberName
+	FROM inserted i
+	INNER JOIN Member p ON p.MemberID = i.MemberID 
+END
+
+更改任務的觸發程序
+CREATE TRIGGER TR_Mission_Update
+ON Mission
+AFTER UPDATE
+AS 
+BEGIN
+INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '新增', '任務',i.MissionName,1,i.MemberID,p.MemberName
+	FROM inserted i
+	INNER JOIN Member p ON p.MemberID = i.MemberID 
+END
+
+5.記事本的TRIGGER
+
+新增記事本時的觸發程序
+CREATE TRIGGER TR_Notebook_Insert
+ON Notebook
+AFTER INSERT
+AS 
+BEGIN
+INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '新增', '記事本',i.NotebookTitle,i.ProgramID,i.MemberID,p.MemberName
+	FROM inserted i
+	INNER JOIN Member p ON p.MemberID=i.MemberID
+END
+
+修改記事本時的觸發程序
+CREATE TRIGGER TR_Notebook_Update
+ON Notebook
+AFTER UPDATE
+AS 
+BEGIN
+INSERT INTO Notify (NotifyDate, NotifyAction, NotifyType, ActionName, ProgramID, MemberID,MemberName)
+    SELECT GETDATE(), '修改', '記事本',i.NotebookTitle,i.ProgramID,i.MemberID,p.MemberName
+	FROM inserted i
+	INNER JOIN Member p ON p.MemberID=i.MemberID
+END

@@ -1,0 +1,113 @@
+/*第五頁個人任務所需資料*/
+Select Mission.MissionName
+From Mission
+where Mission.MemberID = 1
+ 
+/*第五頁 個人行事曆所需資料*/
+select Mission.MisStartTime,Mission.MisFinishTime,Program.ProgramColor,Mission.MissionName,Mission.MisState
+from Mission 
+inner join Intent
+on  Mission.IntentID = Intent.IntentID 
+inner join Program 
+on Program.ProgramID = Intent.ProgramID
+where Mission.MemberID = 1
+
+/*第六頁專案概述,ProgramOverview抓的是概述內容*/
+select Program.ProgramOverview
+from Program
+where Program.ProgramID = 1
+
+/*第六頁專案參與人員,抓照片路徑和頭像姓名*/
+select Member.MemberPhoto,Member.MemberName
+from Member
+inner join ProgramMember
+on Member.MemberID = ProgramMember.MemberID
+where ProgramMember.ProgramID = 1
+
+/*第六頁專案link,抓隸屬於此專案的link內容以及內容標題*/
+select ProgramLinkList.LinkTitle,ProgramLinkList.LinkURL
+from ProgramLinkList
+inner join Program
+on Program.ProgramID = ProgramLinkList.ProgramID
+where ProgramLinkList.ProgramID = 1
+
+/*第七頁目標,需要取得此專案包含的目標名字,目標包含的任務總數,任務完成數*/
+select Intent.IntentName,Intent.MissionCountTotal,Intent.MissionCountFinish
+from Intent
+inner join Program
+on Program.ProgramID = Intent.ProgramID
+where Intent.ProgramID = 1
+
+/*第八頁任務,根據該專案下的目標分類,選取任務名稱,任務開始日期,任務結束日期,任務負責人頭像,任務負責人信箱*/
+/*根據上述限制抓取類別"新任務"的資料*/
+select Mission.MissionName,Mission.MisStartTime,Mission.MisFinishTime,Member.MemberPhoto,Member.MemberAccount
+from Mission
+inner join Intent
+on Mission.IntentID = Intent.IntentID
+inner join Member
+on Member.MemberID = Mission.MemberID
+where Mission.MisState = '新任務'
+
+/*根據上述限制抓取類別"進行中"的資料*/
+select Mission.MissionName,Mission.MisStartTime,Mission.MisFinishTime,Member.MemberPhoto,Member.MemberAccount
+from Mission
+inner join Intent
+on Mission.IntentID = Intent.IntentID
+inner join Member
+on Member.MemberID = Mission.MemberID
+where Mission.MisState = '進行中'
+
+/*根據上述限制抓取類別"已完成"的資料*/
+select Mission.MissionName,Mission.MisStartTime,Mission.MisFinishTime,Member.MemberPhoto,Member.MemberAccount
+from Mission
+inner join Intent
+on Mission.IntentID = Intent.IntentID
+inner join Member
+on Member.MemberID = Mission.MemberID
+where Mission.MisState = '已完成'
+
+/*第九頁 新增任務選擇頁面 抓取 此專案 包含的 人員頭像 以供選擇*/
+select Member.MemberPhoto
+from Member
+inner join ProgramMember
+on Member.MemberID = ProgramMember.MemberID
+inner join Program
+on Program.ProgramID = ProgramMember.ProgramID
+where Program.ProgramID = 1
+
+/*第九頁 新增任務選擇頁面 抓取 此專案 包含的 目標 以供選擇*/
+Select Intent.IntentName
+From Intent
+inner join Program
+on Program.ProgramID = Intent.ProgramID
+where Intent.ProgramID = 1
+
+/*第十頁 行事曆event所需資料，隸屬於 '此專案' 的 任務開始時間,任務結束時間,任務名字,專案設定顏色 */
+Select Mission.MisStartTime,Mission.MisFinishTime,Mission.MissionName,Program.ProgramColor
+From Mission
+inner join Intent 
+on Mission.IntentID = Intent.IntentID
+inner join Program
+on Program.ProgramID = Intent.ProgramID
+where Program.ProgramID = 1
+
+/*第十一頁 記事本	隸屬於 '此專案' 的 記事本標題 記事本日期 編輯人頭像 (還有記事本編號 供按鈕發送給下一頁的資料 不用顯示)*/
+Select Notebook.NotebookTitle,Notebook.NotebooAddDate,Member.MemberPhoto,Member.MemberID
+From Notebook
+inner join Member
+on Member.MemberID = Notebook.MemberID
+where Notebook.ProgramID = 1
+order by Notebook.NotebooAddDate desc
+
+/*第十二頁 記事本內容 由上一頁點進來後 '此記事本'的 記事本標題 記事本創建時間 */
+Select Notebook.NotebookTitle,Notebook.NotebookContent,Notebook.NotebooAddDate
+from Notebook
+where Notebook.MemberID = 3
+
+/*第十三頁 通知 通知日期*/
+Select Notify.NotifyDate,Member.MemberName,Notify.NotifyAction,Notify.NotifyType,Notify.ActionName
+From Notify
+inner join Member
+on Notify.MemberID = Member.MemberID
+where Notify.ProgramID = 1
+ORDER BY Notify.NotifyDate DESC
